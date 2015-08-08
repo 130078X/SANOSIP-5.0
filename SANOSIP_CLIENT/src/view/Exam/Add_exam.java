@@ -242,6 +242,11 @@ public class Add_exam extends javax.swing.JFrame {
         );
 
         reg.setText("Register");
+        reg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -283,23 +288,30 @@ public class Add_exam extends javax.swing.JFrame {
         if(evt.getKeyChar()==KeyEvent.VK_ENTER){
             try {
                 classid=Integer.parseInt(classId.getText());
+                System.out.println(classid);
             } 
             catch (Exception e) {
             }
-            SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-DD");
-            examDate=year.getSelectedItem()+"-"+String.valueOf(months.indexOf(month.getSelectedItem()))+"-"+String.valueOf(day.getSelectedItem());
+            
+            
+        }
+    }//GEN-LAST:event_classIdKeyPressed
+
+    private void regActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regActionPerformed
+        SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-DD");
+            examDate=year.getSelectedItem()+"-"+String.valueOf(months.indexOf(month.getSelectedItem())+1)+"-"+String.valueOf(day.getSelectedItem());
             try {
-                date=sdf.parse(sdf.format(examDate));
+                date=sdf.parse(examDate);
             } catch (ParseException ex) {
                 Logger.getLogger(Add_exam.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             
             Exam e=new Exam(classid,classname,date);
-            //need class detail from other class
+            //need class detail from other class    
+       
             
-        }
-    }//GEN-LAST:event_classIdKeyPressed
+    }//GEN-LAST:event_regActionPerformed
 
     /**
      * @param args the command line arguments
