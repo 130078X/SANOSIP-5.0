@@ -21,7 +21,7 @@ public class ServerMain {
         System.setProperty("java.rmi.server.hostname","localhost");
         try {
             Registry customerRegistry = LocateRegistry.createRegistry(1099);
-            customerRegistry.rebind("Sanosip ", new RemoteFactoryImpl());
+            customerRegistry.rebind("rmi://localhost:1099/sanosip_2_0", new RemoteFactoryImpl());
             
         } catch (RemoteException ex) {
             Logger.getLogger(ServerMain.class.getName()).log(Level.SEVERE, null, ex);
