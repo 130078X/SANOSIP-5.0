@@ -18,6 +18,7 @@ import java.sql.SQLException;
 public class paymentController_impl extends UnicastRemoteObject implements paymentController {
 
     private payment DA_payment = null;
+    private payment DA_payment2 = null;
 
     public paymentController_impl() throws RemoteException  {
         super();
