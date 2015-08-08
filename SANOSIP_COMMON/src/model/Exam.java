@@ -15,6 +15,7 @@ public class Exam {
     private String className;
     private Date date;
     
+    
     public Exam(int classID,String className,Date date){
         this.classID=classID;
         this.className=className;
