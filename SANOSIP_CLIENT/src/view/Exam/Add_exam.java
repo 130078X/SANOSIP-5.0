@@ -6,6 +6,16 @@
 
 package view.Exam;
 
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Exam;
+
 /**
  *
  * @author 130380P
@@ -16,6 +26,8 @@ public class Add_exam extends javax.swing.JFrame {
      * Creates new form Add_exam
      */
     public Add_exam() {
+        this.months = new ArrayList<String>(
+                Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
         initComponents();
     }
 
@@ -141,6 +153,12 @@ public class Add_exam extends javax.swing.JFrame {
 
         jLabel4.setText(":-");
 
+        classId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                classIdKeyPressed(evt);
+            }
+        });
+
         jLabel11.setText("Class Name");
 
         jLabel12.setText(":-");
@@ -255,6 +273,33 @@ public class Add_exam extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    private int classid;
+    private String examDate;
+    private String classname;
+    private ArrayList<String> months;
+    private Date date;
+    
+    private void classIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_classIdKeyPressed
+        if(evt.getKeyChar()==KeyEvent.VK_ENTER){
+            try {
+                classid=Integer.parseInt(classId.getText());
+            } 
+            catch (Exception e) {
+            }
+            SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-DD");
+            examDate=year.getSelectedItem()+"-"+String.valueOf(months.indexOf(month.getSelectedItem()))+"-"+String.valueOf(day.getSelectedItem());
+            try {
+                date=sdf.parse(sdf.format(examDate));
+            } catch (ParseException ex) {
+                Logger.getLogger(Add_exam.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            Exam e=new Exam(classid,classname,date);
+            //need class detail from other class
+            
+        }
+    }//GEN-LAST:event_classIdKeyPressed
 
     /**
      * @param args the command line arguments
