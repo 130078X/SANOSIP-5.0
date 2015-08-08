@@ -27,7 +27,7 @@ public class ServerConnector {
 
     
      private ServerConnector() throws NotBoundException, MalformedURLException, RemoteException {
-        String lookupString = "rmi://localhost:1099/Sanosip Server";
+        String lookupString = "rmi://localhost:1099/sanosip_2_0";
         remoteFactory = (RemoteFactory) Naming.lookup(lookupString);
      }
     
