@@ -9,6 +9,7 @@ package dataAccess;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import utilities.DB;
 
@@ -18,10 +19,10 @@ import utilities.DB;
  */
 public class employeeDA {
     
-    public ResultSet getemployeeDetailsByNIC(String NIC) throws ClassNotFoundException, SQLException {
+    public ResultSet getemployeeDetailsByUserID(String id) throws ClassNotFoundException, SQLException {
         
         Connection con = DB.getConnection();
-        String query = "select * from employee where nic ='" + NIC + "'";
+        String query = "select * from employee where employee_id='" + id + "'";
         ResultSet rs = utilities.DB_handler.getData(con, query);
         return rs;
     }
@@ -29,7 +30,7 @@ public class employeeDA {
      public ResultSet getemployeeDetailsByName(String Name) throws ClassNotFoundException, SQLException {
         
         Connection con = DB.getConnection();
-        String query = "select * from employee where nic ='" + Name + "'";
+        String query = "select * from employee where first_name='" + Name + "'";
         ResultSet rs = utilities.DB_handler.getData(con, query);
         return rs;
     }
@@ -41,6 +42,20 @@ public class employeeDA {
         return spd;
     }
      
+    public ArrayList<String> getNamesInDB() throws ClassNotFoundException, SQLException{
+        
+        Connection con = DB.getConnection();
+        String query = "select * from employee ";
+        ResultSet rs = utilities.DB_handler.getData(con, query);
+        
+        ArrayList<String> values = new ArrayList<String>();
+        
+        while(!rs.next()){
+           String name = rs.getObject(1).toString()+" "+rs.getObject(2).toString();
+           values.add(name);
+        } 
+        return values; 
+    }
     
     
 }
