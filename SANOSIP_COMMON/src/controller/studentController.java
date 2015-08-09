@@ -19,5 +19,6 @@ public interface studentController {
      public ResultSet getStudentDetails(String StudentID) throws ClassNotFoundException, SQLException;
      public ResultSet getStudentDetailsByName(String Name) throws ClassNotFoundException, SQLException;
      public int AddStudent(model.student stu,Date date) throws ClassNotFoundException, SQLException;
-    //public ArrayList<String> getNamesInDB() throws ClassNotFoundException, SQLException;
+     public ArrayList<String> getNamesInDB() throws ClassNotFoundException, SQLException;
+     public int DeleteStudent(String StudentID) throws ClassNotFoundException,SQLException;
 }
