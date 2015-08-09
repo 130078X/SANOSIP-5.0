@@ -9,6 +9,7 @@ package controller;
 import java.rmi.Remote;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 /**
  *
@@ -19,5 +20,5 @@ public interface employeeControler extends Remote{
     public ResultSet getemployeeDetailsByNIC(String NIC) throws ClassNotFoundException, SQLException ;
     public ResultSet getemployeeDetailsByName(String Name) throws ClassNotFoundException, SQLException;
     public int AddEmployee(model.employee emp,Date date) throws ClassNotFoundException, SQLException;
-    
+    public ArrayList<String> getNamesInDB() throws ClassNotFoundException, SQLException;
 }
