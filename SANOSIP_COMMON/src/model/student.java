@@ -21,10 +21,11 @@ public class student {
     private int contactNo;
     private String gender;
     private Date date;
+    private String nic;
     private String gurName;
     private int  gurContactNo;
     
-    public student(String firstName,String lastName,String school,String address,int alYear,int contactNo,String gender,Date date,String gurName,int  gurContactNo)
+    public student(String firstName,String lastName,String school,String address,int alYear,int contactNo,String gender,String nic,Date date,String gurName,int  gurContactNo)
     {
         this.firstName=firstName;
         this.lastName=lastName;
@@ -34,6 +35,7 @@ public class student {
         this.contactNo=contactNo;
         this.gender=gender;
         this.date=date;
+        this.nic=nic;
         this.gurName=gurName;
         this.gurContactNo=gurContactNo;
         
@@ -179,6 +181,20 @@ public class student {
      */
     public void setGurContactNo(int gurContactNo) {
         this.gurContactNo = gurContactNo;
+    }
+
+    /**
+     * @return the nic
+     */
+    public String getNic() {
+        return nic;
+    }
+
+    /**
+     * @param nic the nic to set
+     */
+    public void setNic(String nic) {
+        this.nic = nic;
     }
     
 }
