@@ -15,6 +15,6 @@ import java.sql.SQLException;
 public interface RemoteFactory extends Remote{
     
     public paymentController getPaymentController() throws RemoteException,SQLException , ClassNotFoundException;
-    
+    public employeeControler getEmployeeController()throws RemoteException,SQLException , ClassNotFoundException;
         
 }

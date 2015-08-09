@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author Nilanga
@@ -18,8 +20,9 @@ public class employee {
     private String nic;
     private String gender;
     private String ac_level;
+    private Date Reg_date;
 
-    public employee(String emp_id, String fname, String lname, String address, String cont_no, String nic, String gender, String ac_level) {
+    public employee(String emp_id, String fname, String lname, String address, String cont_no, String nic, String gender, String ac_level,Date Reg_date) {
         this.emp_id = emp_id;
         this.fname = fname;
         this.lname = lname;
@@ -28,8 +31,20 @@ public class employee {
         this.nic = nic;
         this.gender = gender;
         this.ac_level = ac_level;
+        this.Reg_date = Reg_date;
     }
 
+    public employee( String fname, String lname, String address, String cont_no, String nic, String gender, String ac_level) {
+        
+         this.fname = fname;
+        this.lname = lname;
+        this.address = address;
+        this.cont_no = cont_no;
+        this.nic = nic;
+        this.gender = gender;
+        this.ac_level = ac_level;
+        
+    }
     public String getEmpID() {
         return this.emp_id;
     }
@@ -92,5 +107,19 @@ public class employee {
 
     public void setAccessLevel(String ac_level) {
         this.ac_level = ac_level;
+    }
+
+    /**
+     * @return the Reg_date
+     */
+    public Date getReg_date() {
+        return Reg_date;
+    }
+
+    /**
+     * @param Reg_date the Reg_date to set
+     */
+    public void setReg_date(Date Reg_date) {
+        this.Reg_date = Reg_date;
     }
 }
