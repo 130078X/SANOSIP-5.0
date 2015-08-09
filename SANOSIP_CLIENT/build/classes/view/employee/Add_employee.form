@@ -263,6 +263,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="RBtnMale">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Male"/>
           </Properties>
           <AccessibilityProperties>
@@ -271,7 +274,11 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="RBtnFemale">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Female"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Gender"/>

@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import model.employee;
@@ -121,9 +122,12 @@ public class Add_employee extends javax.swing.JFrame {
 
         jLabel6.setText("Gender          :");
 
+        buttonGroup1.add(RBtnMale);
         RBtnMale.setText("Male");
 
+        buttonGroup1.add(RBtnFemale);
         RBtnFemale.setText("Female");
+        RBtnFemale.setContentAreaFilled(false);
 
         jLabel7.setText("Access Level :");
 
@@ -313,6 +317,8 @@ public class Add_employee extends javax.swing.JFrame {
 
     }//GEN-LAST:event_TextContactNoActionPerformed
 
+    
+   
     /**
      * @param args the command line arguments
      */

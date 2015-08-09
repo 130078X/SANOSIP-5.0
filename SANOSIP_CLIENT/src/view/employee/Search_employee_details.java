@@ -4,6 +4,17 @@
  */
 package view.employee;
 
+import connection.ServerConnector;
+import controller.RemoteFactory;
+import controller.employeeControler;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Nilanga
@@ -13,9 +24,11 @@ public class Search_employee_details extends javax.swing.JFrame {
     /**
      * Creates new form Search_employee_details
      */
-    public Search_employee_details() {
-        initComponents();
+    public Search_employee_details( ) {
+        initComponents(); 
+        ////have to pass arralist when openning the form
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +43,8 @@ public class Search_employee_details extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         TextSearchUID = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
+        ComboBoxNames = new javax.swing.JComboBox();
+        BTNsearch = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         TextName = new javax.swing.JTextField();
@@ -58,7 +72,9 @@ public class Search_employee_details extends javax.swing.JFrame {
 
         jLabel9.setText("User ID          :");
 
-        jComboBox1.setEditable(true);
+        ComboBoxNames.setEditable(true);
+
+        BTNsearch.setText("search");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,13 +82,16 @@ public class Search_employee_details extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TextSearchUID, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BTNsearch)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TextSearchUID, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(ComboBoxNames, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -83,8 +102,10 @@ public class Search_employee_details extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
                     .addComponent(TextSearchUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(ComboBoxNames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(BTNsearch)
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Employee Details"));
@@ -197,16 +218,16 @@ public class Search_employee_details extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BTNClear)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
@@ -217,7 +238,33 @@ public class Search_employee_details extends javax.swing.JFrame {
     private void BTNClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNClearActionPerformed
 
     }//GEN-LAST:event_BTNClearActionPerformed
-
+    //set existing names in database to combobox
+    private void setComboBoxItems(){
+        try {
+            ServerConnector serverConnector=ServerConnector.getServerConnector();
+            RemoteFactory remoteFactory=serverConnector.getRemoteFactory();
+            
+            employeeControler empControler = remoteFactory.getEmployeeController();
+            
+            ArrayList<String> values = empControler.getNamesInDB();
+            
+            int size = values.size();
+            for(int i=0;i<size;i++){
+                ComboBoxNames.addItem(values.get(i));
+            }
+            
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Search_employee_details.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Search_employee_details.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Search_employee_details.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Search_employee_details.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Search_employee_details.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -254,13 +301,14 @@ public class Search_employee_details extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNClear;
+    private javax.swing.JButton BTNsearch;
+    private javax.swing.JComboBox ComboBoxNames;
     private javax.swing.JTextArea TextAddress;
     private javax.swing.JTextField TextContactNo;
     private javax.swing.JTextField TextNIC;
     private javax.swing.JTextField TextName;
     private javax.swing.JTextField TextName1;
     private javax.swing.JTextField TextSearchUID;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
