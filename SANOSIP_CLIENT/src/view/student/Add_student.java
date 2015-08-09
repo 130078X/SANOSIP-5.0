@@ -6,8 +6,21 @@
 
 package view.student;
 
+import connection.ServerConnector;
+import controller.RemoteFactory;
+import controller.studentController;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import model.student;
 
 /**
  *
@@ -43,11 +56,13 @@ public class Add_student extends javax.swing.JFrame {
         Textcontactno = new javax.swing.JTextField();
         l6 = new javax.swing.JLabel();
         l7 = new javax.swing.JLabel();
-        Textbirth = new javax.swing.JTextField();
         Btnmale = new javax.swing.JRadioButton();
         Btnfemale = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         Textfirstname = new javax.swing.JTextField();
+        ComboBoxMonth = new javax.swing.JComboBox();
+        ComboBoxDay = new javax.swing.JComboBox();
+        ComboBoxYear = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         l8 = new javax.swing.JLabel();
         l9 = new javax.swing.JLabel();
@@ -112,6 +127,12 @@ public class Add_student extends javax.swing.JFrame {
 
         jLabel1.setText("First Name : ");
 
+        ComboBoxMonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", " " }));
+
+        ComboBoxDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        ComboBoxYear.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -123,14 +144,21 @@ public class Add_student extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(l7)
                             .addComponent(l6))
-                        .addGap(23, 23, 23)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(Btnmale)
+                                .addGap(23, 23, 23)
+                                .addComponent(Btnmale))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(Btnfemale))
-                            .addComponent(Textbirth, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(151, Short.MAX_VALUE))
+                                .addComponent(ComboBoxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(ComboBoxDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(ComboBoxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Btnfemale))
+                        .addContainerGap(80, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(l2)
@@ -194,11 +222,16 @@ public class Add_student extends javax.swing.JFrame {
                     .addComponent(Btnfemale)
                     .addComponent(l6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(l7)
-                    .addComponent(Textbirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ComboBoxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBoxDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBoxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
+
+        Btnmale.getAccessibleContext().setAccessibleName("Gender");
+        Btnfemale.getAccessibleContext().setAccessibleName("Gender");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Gurdian's Details"));
 
@@ -288,7 +321,7 @@ public class Add_student extends javax.swing.JFrame {
                         .addComponent(ButnSave)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(BTNClear, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 31, Short.MAX_VALUE))
+                .addGap(0, 32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,6 +356,58 @@ public class Add_student extends javax.swing.JFrame {
     }//GEN-LAST:event_TextyearActionPerformed
 
     private void ButnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButnSaveActionPerformed
+        
+        try {
+            String Gender;
+            String birth;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(sdf.format(new Date()));
+            //if(Btnmale.isSelected())
+            // get selected gender
+            if( Btnfemale.isSelected()){
+                Gender = "Female";
+            }
+            else{
+                Gender = "Male";
+            }
+            birth=ComboBoxYear.getSelectedItem().toString()+"-"+ComboBoxMonth.getSelectedItem().toString()+"-"+ComboBoxDay.getSelectedItem().toString();
+            Date birthDay=sdf.parse(birth);
+            
+            ServerConnector serverConnector=ServerConnector.getServerConnector();
+            RemoteFactory remoteFactory=serverConnector.getRemoteFactory();
+            
+            // newly adding employ
+            //String firstName,String lastName,String school,String address,int alYear,int contactNo,String gender,Date date,String gurName,int  gurContactNo
+            student stu = new student(Textfirstname.getText(),Textlastname.getText(),Textschool.getText(),Textaddress.getText(),Integer.parseInt(Textyear.getText()),Integer.parseInt(Textcontactno.getText()),Gender,birthDay,Textgurname.getText(),Integer.parseInt(Textgurcontactno.getText()));
+            
+            studentController stuController = remoteFactory.getStudentController();
+            int sMsg = stuController.AddStudent(stu, date);
+            
+            //verify if added to database successfully
+            if(sMsg == 1){
+                JOptionPane.showMessageDialog(null,"Successfully added!!!!!!!");
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Failed !!!!!!!");
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         catch (NotBoundException ex) {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex)
+        {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) 
+        {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) 
+        {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(Add_student.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_ButnSaveActionPerformed
 
@@ -378,8 +463,10 @@ public class Add_student extends javax.swing.JFrame {
     private javax.swing.JRadioButton Btnfemale;
     private javax.swing.JRadioButton Btnmale;
     private javax.swing.JButton ButnSave;
+    private javax.swing.JComboBox ComboBoxDay;
+    private javax.swing.JComboBox ComboBoxMonth;
+    private javax.swing.JComboBox ComboBoxYear;
     private javax.swing.JTextField Textaddress;
-    private javax.swing.JTextField Textbirth;
     private javax.swing.JTextField Textcontactno;
     private javax.swing.JTextField Textfirstname;
     private javax.swing.JTextField Textgurcontactno;
