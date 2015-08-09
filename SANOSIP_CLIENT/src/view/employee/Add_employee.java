@@ -6,9 +6,21 @@
 
 package view.employee;
 
+import connection.ServerConnector;
+import controller.RemoteFactory;
+import controller.employeeControler;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
+import model.employee;
 
 
 /**
@@ -40,7 +52,7 @@ public class Add_employee extends javax.swing.JFrame {
         TextUserID = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        TextName = new javax.swing.JTextField();
+        TextFirstName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         TextContactNo = new javax.swing.JTextField();
@@ -53,7 +65,7 @@ public class Add_employee extends javax.swing.JFrame {
         CombBoxEmployType = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextAddress = new javax.swing.JTextArea();
-        TextName1 = new javax.swing.JTextField();
+        TextLastName = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         BTNRegister = new javax.swing.JButton();
         BTNClear = new javax.swing.JButton();
@@ -92,8 +104,8 @@ public class Add_employee extends javax.swing.JFrame {
 
         jLabel2.setText("First Name     :");
 
-        TextName.setText("                                 ");
-        TextName.setCaretPosition(0);
+        TextFirstName.setText("                                 ");
+        TextFirstName.setCaretPosition(0);
 
         jLabel3.setText("Address         :");
 
@@ -121,8 +133,8 @@ public class Add_employee extends javax.swing.JFrame {
         TextAddress.setRows(5);
         jScrollPane1.setViewportView(TextAddress);
 
-        TextName1.setText("                                 ");
-        TextName1.setCaretPosition(0);
+        TextLastName.setText("                                 ");
+        TextLastName.setCaretPosition(0);
 
         jLabel8.setText("Last Name     :");
 
@@ -148,11 +160,11 @@ public class Add_employee extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel8)
                             .addGap(18, 18, 18)
-                            .addComponent(TextName1))
+                            .addComponent(TextLastName))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addGap(18, 18, 18)
-                            .addComponent(TextName, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(TextFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
@@ -174,11 +186,11 @@ public class Add_employee extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(TextName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(TextName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -248,7 +260,53 @@ public class Add_employee extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTNRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegisterActionPerformed
-                
+        try {
+            
+            String Gender;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");    
+            Date date = sdf.parse(sdf.format(new Date()));
+            
+            // get selected gender
+            if(RBtnFemale.isSelected()){
+                Gender = "Female";
+            }
+            else{
+                Gender = "Male";
+            }
+            
+            ServerConnector serverConnector=ServerConnector.getServerConnector();
+            RemoteFactory remoteFactory=serverConnector.getRemoteFactory();
+            
+            // newly adding employ
+            employee emp = new employee(TextFirstName.getText(),TextLastName.getText(),TextAddress.getText(),TextContactNo.getText(),TextNIC.getText(),Gender,CombBoxEmployType.getSelectedItem().toString());
+            
+            employeeControler empControler = remoteFactory.getEmployeeController();
+            int sMsg = empControler.AddEmployee(emp, date);
+            
+            //verify if added to database successfully
+            if(sMsg == 1){
+                 JOptionPane.showMessageDialog(null,"Successfully added!!!!!!!");
+            }
+            else{
+                 JOptionPane.showMessageDialog(null,"Failed !!!!!!!");
+            }
+            
+            
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Add_employee.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }//GEN-LAST:event_BTNRegisterActionPerformed
 
     private void TextContactNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextContactNoActionPerformed
@@ -290,9 +348,9 @@ public class Add_employee extends javax.swing.JFrame {
     private javax.swing.JRadioButton RBtnMale;
     private javax.swing.JTextArea TextAddress;
     private javax.swing.JTextField TextContactNo;
+    private javax.swing.JTextField TextFirstName;
+    private javax.swing.JTextField TextLastName;
     private javax.swing.JTextField TextNIC;
-    private javax.swing.JTextField TextName;
-    private javax.swing.JTextField TextName1;
     private javax.swing.JTextField TextUserID;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel2;
